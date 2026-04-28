@@ -10,8 +10,9 @@ import (
 )
 
 type CreateTableRequest struct {
-	OpenID   string `json:"open_id"`
-	Nickname string `json:"nickname"`
+	OpenID    string `json:"open_id"`
+	Nickname  string `json:"nickname"`
+	AvatarURL string `json:"avatar_url"`
 }
 
 type CreateTableResponse struct {
@@ -37,14 +38,15 @@ func CreateTable(c *gin.Context) {
 		return
 	}
 
-	table.AddPlayer(req.OpenID, req.Nickname, true)
+	table.AddPlayer(req.OpenID, req.Nickname, req.AvatarURL, true)
 	c.JSON(http.StatusOK, CreateTableResponse{TableID: tableID})
 }
 
 type JoinTableRequest struct {
-	TableID  string `json:"table_id"`
-	OpenID   string `json:"open_id"`
-	Nickname string `json:"nickname"`
+	TableID   string `json:"table_id"`
+	OpenID    string `json:"open_id"`
+	Nickname  string `json:"nickname"`
+	AvatarURL string `json:"avatar_url"`
 }
 
 func JoinTable(c *gin.Context) {
@@ -66,7 +68,7 @@ func JoinTable(c *gin.Context) {
 		return
 	}
 
-	table.AddPlayer(req.OpenID, req.Nickname, false)
+	table.AddPlayer(req.OpenID, req.Nickname, req.AvatarURL, false)
 	ricchiWebsocket.GetHub().NotifyStateChange(table)
 	c.JSON(http.StatusOK, gin.H{"status": "joined"})
 }

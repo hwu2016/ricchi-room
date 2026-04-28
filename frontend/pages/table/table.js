@@ -1,10 +1,11 @@
-const API_BASE = 'http://localhost:8080'
+const API_BASE = wx.getStorageSync('apiBase') || 'http://localhost:8080'
 
 Page({
   data: {
     tableId: '',
     status: 'waiting',
     players: [],
+    playerSlots: [null, null, null, null],
     is_owner: false,
     showPayModal: false,
     showSettleModal: false,
@@ -36,7 +37,15 @@ Page({
         const { status, players } = res.data
         const openId = this.getOpenId()
         const is_owner = players.some(p => p.is_owner && p.open_id === openId)
-        this.setData({ status, players, is_owner })
+
+        const slots = [null, null, null, null]
+        players.forEach((p) => {
+          if (p.seat_index >= 0 && p.seat_index < 4) {
+            slots[p.seat_index] = p
+          }
+        })
+
+        this.setData({ status, players, is_owner, playerSlots: slots })
       }
     } catch (err) {
       console.error('fetch table error:', err)
@@ -52,9 +61,17 @@ Page({
     this.ws.onMessage((res) => {
       const data = JSON.parse(res.data)
       if (data.type === 'state_update') {
+        const players = data.table.players
+        const slots = [null, null, null, null]
+        players.forEach((p) => {
+          if (p.seat_index >= 0 && p.seat_index < 4) {
+            slots[p.seat_index] = p
+          }
+        })
         this.setData({
           status: data.table.status,
-          players: data.table.players
+          players,
+          playerSlots: slots
         })
       }
     })
@@ -70,27 +87,16 @@ Page({
 
   onPlayerTap(e) {
     const openId = e.currentTarget.dataset.openid
-    if (openId !== this.getOpenId()) {
-      this.setData({
-        showPayModal: true,
-        targetOpenId: openId
-      })
+    if (!openId || openId === this.getOpenId()) {
+      return
     }
+    this.setData({
+      showPayModal: true,
+      targetOpenId: openId
+    })
   },
 
-  onPay() {
-    const openId = this.getOpenId()
-    const players = this.data.players
-    if (players.length > 1) {
-      const other = players.find(p => p.open_id !== openId)
-      if (other) {
-        this.setData({
-          showPayModal: true,
-          targetOpenId: other.open_id
-        })
-      }
-    }
-  },
+  onPay() {},
 
   onPayChange(e) {
     this.setData({ payIndex: e.detail.value })

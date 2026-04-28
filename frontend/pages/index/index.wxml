@@ -1,6 +1,16 @@
 <view class="container">
   <text class="title">立直记分房</text>
 
+  <view class="user-info">
+    <block wx:if="{{nickname}}">
+      <image class="avatar" src="{{avatarUrl}}" mode="aspectFill"></image>
+      <text class="nickname">{{nickname}}</text>
+    </block>
+    <block wx:else>
+      <button class="btn auth-btn" bindtap="getUserProfile">授权获取头像</button>
+    </block>
+  </view>
+
   <input class="input" placeholder="输入牌桌ID" type="number" maxlength="4" bindinput="onInputTableId" />
 
   <button class="btn" bindtap="onJoin">加入房间</button>

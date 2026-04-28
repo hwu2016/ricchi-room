@@ -25,11 +25,12 @@ type Table struct {
 }
 
 type Player struct {
-	OpenID     string `json:"open_id"`
-	Nickname   string `json:"nickname"`
+	OpenID      string `json:"open_id"`
+	Nickname    string `json:"nickname"`
+	AvatarURL  string `json:"avatar_url"`
 	Points     int    `json:"points"`
 	IsOwner    bool   `json:"is_owner"`
-	IsConnected bool `json:"is_connected"`
+	IsConnected bool   `json:"is_connected"`
 	SeatIndex  int    `json:"seat_index"`
 }
 
@@ -43,18 +44,19 @@ func NewTable(id string) *Table {
 	}
 }
 
-func (t *Table) AddPlayer(openID, nickname string, isOwner bool) (*Player, int) {
+func (t *Table) AddPlayer(openID, nickname, avatarURL string, isOwner bool) (*Player, int) {
 	t.mu.Lock()
 	defer t.mu.Unlock()
 
 	seat := len(t.Players)
 	player := &Player{
-		OpenID:      openID,
-		Nickname:    nickname,
-		Points:     25000,
-		IsOwner:     isOwner,
+		OpenID:       openID,
+		Nickname:     nickname,
+		AvatarURL:    avatarURL,
+		Points:      25000,
+		IsOwner:      isOwner,
 		IsConnected: true,
-		SeatIndex:  seat,
+		SeatIndex:   seat,
 	}
 	t.Players[openID] = player
 	return player, seat

@@ -4,19 +4,22 @@
     <text class="status">{{status}}</text>
   </view>
 
+  <view class="back-btn" bindtap="onLeave">
+    <text class="back-arrow">←</text>
+  </view>
+
   <view class="players">
-    <view class="player {{item.is_owner ? 'owner' : ''}}" wx:for="{{players}}" wx:key="open_id" data-openid="{{item.open_id}}" bindtap="onPlayerTap">
-      <view class="avatar">{{item.nickname[0]}}</view>
-      <text class="nickname">{{item.nickname}}</text>
-      <text class="points">{{item.points}}</text>
-      <text class="owner-badge" wx:if="{{item.is_owner}}">房主</text>
+    <view class="player {{item ? (item.is_owner ? 'owner' : '') : 'empty'}}" wx:for="{{playerSlots}}" wx:key="index" data-openid="{{item ? item.open_id : ''}}" bindtap="onPlayerTap">
+      <image class="avatar-img" src="{{item ? item.avatar_url : ''}}" mode="aspectFill" wx:if="{{item && item.avatar_url}}"></image>
+      <view class="avatar" wx:else>{{item ? item.nickname[0] : '?'}}</view>
+      <text class="nickname">{{item ? item.nickname : '等待加入'}}</text>
+      <text class="points" wx:if="{{item}}">{{item.points}}</text>
+      <text class="owner-badge" wx:if="{{item && item.is_owner}}">房主</text>
     </view>
   </view>
 
-  <view class="actions">
-    <button class="btn pay-btn" bindtap="onPay">支付点数</button>
-    <button class="btn settle-btn" wx:if="{{is_owner}}" bindtap="onSettle">结算</button>
-    <button class="btn leave-btn" bindtap="onLeave">离开房间</button>
+  <view class="actions" wx:if="{{is_owner}}">
+    <button class="btn settle-btn" bindtap="onSettle">结算</button>
   </view>
 
   <view class="modal" wx:if="{{showPayModal}}">

@@ -1,6 +1,7 @@
 .container {
   min-height: 100vh;
   padding: 20px;
+  position: relative;
 }
 
 .header {
@@ -22,6 +23,24 @@
   background: rgba(255, 255, 255, 0.7);
   padding: 5px 15px;
   border-radius: 15px;
+}
+
+.back-btn {
+  position: absolute;
+  top: 20px;
+  right: 20px;
+  width: 40px;
+  height: 40px;
+  background: rgba(255, 255, 255, 0.85);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.back-arrow {
+  font-size: 24px;
+  color: #333;
 }
 
 .players {
@@ -47,6 +66,10 @@
   border: 3px solid #fbd786;
 }
 
+.player.empty {
+  opacity: 0.5;
+}
+
 .avatar {
   width: 60px;
   height: 60px;
@@ -58,6 +81,13 @@
   font-size: 24px;
   font-weight: bold;
   color: #333;
+  margin-bottom: 10px;
+}
+
+.avatar-img {
+  width: 60px;
+  height: 60px;
+  border-radius: 50%;
   margin-bottom: 10px;
 }
 
@@ -98,14 +128,10 @@
   color: #333;
 }
 
-.pay-btn {}
-
 .settle-btn {
   background: linear-gradient(135deg, #fbd786 0%, #f7797d 100%);
-}
-
-.leave-btn {
-  background: #eee;
+  display: block;
+  margin: 20px auto;
 }
 
 .modal {

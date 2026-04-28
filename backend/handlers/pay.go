@@ -124,9 +124,10 @@ func DismissTable(c *gin.Context) {
 }
 
 type ReconnectRequest struct {
-	TableID  string `json:"table_id"`
+	TableID   string `json:"table_id"`
 	OpenID   string `json:"open_id"`
 	Nickname string `json:"nickname"`
+	AvatarURL string `json:"avatar_url"`
 }
 
 func Reconnect(c *gin.Context) {
@@ -146,7 +147,7 @@ func Reconnect(c *gin.Context) {
 	if player := table.GetPlayer(req.OpenID); player != nil {
 		player.IsConnected = true
 	} else {
-		table.AddPlayer(req.OpenID, req.Nickname, false)
+		table.AddPlayer(req.OpenID, req.Nickname, req.AvatarURL, false)
 	}
 
 	ricchiWebsocket.GetHub().NotifyStateChange(table)

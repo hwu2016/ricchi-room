@@ -1,15 +1,29 @@
-const API_BASE = 'http://localhost:8080'
+const API_BASE = wx.getStorageSync('apiBase') || 'http://localhost:8080'
+
+App({
+  onLaunch() {
+    const userInfo = wx.getStorageSync('userInfo')
+    if (!userInfo) {
+      wx.login({
+        success: res => {
+          console.log('login code:', res.code)
+        }
+      })
+    }
+  }
+})
 
 Page({
   data: {
     tableId: '',
-    nickname: ''
+    nickname: '',
+    avatarUrl: ''
   },
 
   onLoad() {
     const userInfo = wx.getStorageSync('userInfo')
     if (userInfo) {
-      this.setData({ nickname: userInfo.nickname })
+      this.setData({ nickname: userInfo.nickName, avatarUrl: userInfo.avatarUrl })
     }
   },
 
@@ -17,62 +31,101 @@ Page({
     this.setData({ tableId: e.detail.value })
   },
 
+  getUserProfile() {
+    return new Promise((resolve) => {
+      wx.getUserProfile({
+        desc: '用于游戏昵称和头像',
+        success: (res) => {
+          const userInfo = res.userInfo
+          wx.setStorageSync('userInfo', userInfo)
+          this.setData({
+            nickname: userInfo.nickName,
+            avatarUrl: userInfo.avatarUrl
+          })
+          resolve(userInfo)
+        },
+        fail: () => {
+          resolve(null)
+        }
+      })
+    })
+  },
+
   async onJoin() {
-    const { tableId, nickname } = this.data
+    const { tableId } = this.data
     if (!tableId || tableId.length !== 4) {
       wx.showToast({ title: '请输入4位牌桌ID', icon: 'none' })
       return
     }
 
+    let { nickname, avatarUrl } = this.data
     if (!nickname) {
-      const nick = wx.getStorageSync('userInfo')?.nickname || '玩家' + Math.random().toString(36).slice(2, 6)
-      this.setData({ nickname: nick })
-    }
-
-    try {
-      const res = await wx.request({
-        url: `${API_BASE}/api/table/join`,
-        method: 'POST',
-        data: {
-          table_id: tableId,
-          open_id: this.getOpenId(),
-          nickname: this.data.nickname
-        }
-      })
-
-      if (res.statusCode === 200) {
-        wx.navigateTo({ url: `/pages/table/table?id=${tableId}` })
+      const info = await this.getUserProfile()
+      if (info) {
+        nickname = info.nickName
+        avatarUrl = info.avatarUrl
       } else {
-        wx.showToast({ title: res.data.error || '加入失败', icon: 'none' })
+        nickname = '玩家' + Math.random().toString(36).slice(2, 6)
       }
-    } catch (err) {
-      wx.showToast({ title: '连接失败', icon: 'none' })
+      this.setData({ nickname, avatarUrl })
     }
+
+    wx.request({
+      url: `${API_BASE}/api/table/join`,
+      method: 'POST',
+      header: { 'content-type': 'application/json' },
+      data: {
+        table_id: tableId,
+        open_id: this.getOpenId(),
+        nickname: nickname,
+        avatar_url: avatarUrl
+      },
+      success: (res) => {
+        if (res.statusCode === 200) {
+          wx.navigateTo({ url: `/pages/table/table?id=${tableId}` })
+        } else {
+          wx.showToast({ title: res.data.error || '加入失败', icon: 'none' })
+        }
+      },
+      fail: () => {
+        wx.showToast({ title: '连接失败', icon: 'none' })
+      }
+    })
   },
 
   async onCreate() {
-    const nickname = this.data.nickname || '玩家' + Math.random().toString(36).slice(2, 6)
-    this.setData({ nickname })
-
-    try {
-      const res = await wx.request({
-        url: `${API_BASE}/api/table/create`,
-        method: 'POST',
-        data: {
-          open_id: this.getOpenId(),
-          nickname: nickname
-        }
-      })
-
-      if (res.statusCode === 200) {
-        const tableId = res.data.table_id
-        wx.navigateTo({ url: `/pages/table/table?id=${tableId}` })
+    let { nickname, avatarUrl } = this.data
+    if (!nickname) {
+      const info = await this.getUserProfile()
+      if (info) {
+        nickname = info.nickName
+        avatarUrl = info.avatarUrl
       } else {
-        wx.showToast({ title: res.data.error || '创建失败', icon: 'none' })
+        nickname = '玩家' + Math.random().toString(36).slice(2, 6)
       }
-    } catch (err) {
-      wx.showToast({ title: '连接失败', icon: 'none' })
+      this.setData({ nickname, avatarUrl })
     }
+
+    wx.request({
+      url: `${API_BASE}/api/table/create`,
+      method: 'POST',
+      header: { 'content-type': 'application/json' },
+      data: {
+        open_id: this.getOpenId(),
+        nickname: nickname,
+        avatar_url: avatarUrl
+      },
+      success: (res) => {
+        if (res.statusCode === 200) {
+          wx.navigateTo({ url: `/pages/table/table?id=${res.data.table_id}` })
+        } else {
+          wx.showToast({ title: res.data.error || '创建失败', icon: 'none' })
+        }
+      },
+      fail: () => {
+        wx.showToast({ title: '连接失败', icon: 'none' })
+      }
+    })
   },
 
   getOpenId() {
