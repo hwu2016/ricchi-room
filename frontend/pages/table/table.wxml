@@ -1,0 +1,45 @@
+<view class="container">
+  <view class="header">
+    <text class="table-id">房间: {{tableId}}</text>
+    <text class="status">{{status}}</text>
+  </view>
+
+  <view class="players">
+    <view class="player {{item.is_owner ? 'owner' : ''}}" wx:for="{{players}}" wx:key="open_id" data-openid="{{item.open_id}}" bindtap="onPlayerTap">
+      <view class="avatar">{{item.nickname[0]}}</view>
+      <text class="nickname">{{item.nickname}}</text>
+      <text class="points">{{item.points}}</text>
+      <text class="owner-badge" wx:if="{{item.is_owner}}">房主</text>
+    </view>
+  </view>
+
+  <view class="actions">
+    <button class="btn pay-btn" bindtap="onPay">支付点数</button>
+    <button class="btn settle-btn" wx:if="{{is_owner}}" bindtap="onSettle">结算</button>
+    <button class="btn leave-btn" bindtap="onLeave">离开房间</button>
+  </view>
+
+  <view class="modal" wx:if="{{showPayModal}}">
+    <view class="modal-content">
+      <text class="modal-title">支付点数</text>
+      <picker mode="selector" range="{{payOptions}}" bindchange="onPayChange">
+        <view class="pay-option">{{payOptions[payIndex] || '选择金额'}}</view>
+      </picker>
+      <button class="btn" bindtap="onConfirmPay">确认支付</button>
+      <button class="btn cancel" bindtap="onCancelPay">取消</button>
+    </view>
+  </view>
+
+  <view class="modal" wx:if="{{showSettleModal}}">
+    <view class="modal-content">
+      <text class="modal-title">结算结果</text>
+      <view class="rank-item" wx:for="{{results}}" wx:key="rank">
+        <text class="rank">第{{item.rank}}名</text>
+        <text class="rank-name">{{item.nickname}}</text>
+        <text class="rank-points">{{item.points}}</text>
+      </view>
+      <button class="btn" bindtap="onDismiss">解散房间</button>
+      <button class="btn" bindtap="onNextRound">再来一局</button>
+    </view>
+  </view>
+</view>

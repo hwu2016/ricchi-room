@@ -1,0 +1,9 @@
+<view class="container">
+  <text class="title">立直记分房</text>
+
+  <input class="input" placeholder="输入牌桌ID" type="number" maxlength="4" bindinput="onInputTableId" />
+
+  <button class="btn" bindtap="onJoin">加入房间</button>
+
+  <button class="btn" style="margin-top: 20px;" bindtap="onCreate">创建房间</button>
+</view>

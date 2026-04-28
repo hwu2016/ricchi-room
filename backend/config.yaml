@@ -1,0 +1,8 @@
+server:
+  port: 8080
+  max_tables: 100
+
+game:
+  initial_points: 25000
+  min_pay: 100
+  max_players: 4

@@ -1,0 +1,13 @@
+{
+  "pages": [
+    "pages/index/index",
+    "pages/table/table"
+  ],
+  "window": {
+    "navigationBarBackgroundColor": "#fbd786",
+    "navigationBarTitleText": "立直记分房",
+    "navigationBarTextStyle": "black"
+  },
+  "style": "v2",
+  "sitemapLocation": "sitemap.json"
+}

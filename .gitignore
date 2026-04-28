@@ -1,0 +1,38 @@
+# Binaries
+*.exe
+*.exe~
+*.dll
+*.so
+*.dylib
+*.test
+*.out
+
+# Go
+bin/
+vendor/
+
+# Backend
+backend/temp/
+*.log
+
+# Frontend (微信小程序)
+frontend/miniprogram_npm/
+frontend/node_modules/
+frontend/service/
+*.wxss.js
+*.wxml.js
+
+# IDE
+.idea/
+.vscode/
+*.swp
+*.swo
+*~
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Config
+*.local.json
+.env

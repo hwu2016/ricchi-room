@@ -1,0 +1,166 @@
+.container {
+  min-height: 100vh;
+  padding: 20px;
+}
+
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 30px;
+}
+
+.table-id {
+  font-size: 20px;
+  font-weight: bold;
+  color: #333;
+}
+
+.status {
+  font-size: 14px;
+  color: #666;
+  background: rgba(255, 255, 255, 0.7);
+  padding: 5px 15px;
+  border-radius: 15px;
+}
+
+.players {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-around;
+  margin-bottom: 40px;
+}
+
+.player {
+  width: 40%;
+  background: rgba(255, 255, 255, 0.85);
+  border-radius: 15px;
+  padding: 20px;
+  margin: 10px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+}
+
+.player.owner {
+  border: 3px solid #fbd786;
+}
+
+.avatar {
+  width: 60px;
+  height: 60px;
+  background: linear-gradient(135deg, #c6ffdd 0%, #fbd786 100%);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 24px;
+  font-weight: bold;
+  color: #333;
+  margin-bottom: 10px;
+}
+
+.nickname {
+  font-size: 16px;
+  color: #333;
+  margin-bottom: 5px;
+}
+
+.points {
+  font-size: 22px;
+  font-weight: bold;
+  color: #f7797d;
+}
+
+.owner-badge {
+  font-size: 12px;
+  background: #fbd786;
+  color: #333;
+  padding: 3px 10px;
+  border-radius: 10px;
+  margin-top: 5px;
+}
+
+.actions {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 15px;
+}
+
+.btn {
+  background: linear-gradient(135deg, #c6ffdd 0%, #fbd786 100%);
+  border: none;
+  border-radius: 25px;
+  padding: 12px 25px;
+  font-size: 16px;
+  color: #333;
+}
+
+.pay-btn {}
+
+.settle-btn {
+  background: linear-gradient(135deg, #fbd786 0%, #f7797d 100%);
+}
+
+.leave-btn {
+  background: #eee;
+}
+
+.modal {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.5);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.modal-content {
+  background: #fff;
+  border-radius: 20px;
+  padding: 30px;
+  width: 80%;
+  max-width: 300px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.modal-title {
+  font-size: 20px;
+  font-weight: bold;
+  color: #333;
+  margin-bottom: 20px;
+}
+
+.pay-option {
+  background: #f0f0f0;
+  padding: 15px;
+  border-radius: 10px;
+  margin-bottom: 20px;
+  width: 100%;
+  text-align: center;
+}
+
+.rank-item {
+  display: flex;
+  justify-content: space-between;
+  width: 100%;
+  padding: 10px 0;
+  border-bottom: 1px solid #eee;
+}
+
+.rank {
+  font-weight: bold;
+  color: #f7797d;
+}
+
+.rank-points {
+  font-weight: bold;
+  color: #333;
+}
